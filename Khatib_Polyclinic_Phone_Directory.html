@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khatib Polyclinic Phone Directory</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:linear-gradient(180deg,#fbfcfe 0%,#f7f9fc 100%);
+  color:#17324d;
+}
+.container{max-width:1180px;margin:auto;padding:52px 28px 38px}
+h1{
+  text-align:center;margin:0;color:#075ca8;font-size:48px;
+  line-height:1.1;font-weight:750;letter-spacing:-1px;
+}
+.notice{text-align:center;color:#66758a;font-size:22px;margin:14px 0 38px}
+.notice strong{color:#3f5570}
+.search-panel{display:flex;gap:12px;align-items:stretch}
+.search-wrap{
+  position:relative;flex:1;background:white;border:1px solid #d7e2ef;
+  border-radius:15px;box-shadow:0 2px 7px rgba(35,67,102,.05)
+}
+.search-icon{
+  position:absolute;left:24px;top:50%;transform:translateY(-50%);
+  width:25px;height:25px;border:3px solid #173d66;border-radius:50%;
+}
+.search-icon:after{
+  content:"";position:absolute;width:12px;height:3px;background:#173d66;
+  right:-9px;bottom:-5px;transform:rotate(45deg);border-radius:3px;
+}
+#searchBox{
+  width:100%;height:76px;border:0;outline:0;background:transparent;
+  padding:0 24px 0 72px;font-size:23px;color:#17324d;border-radius:15px;
+}
+#searchBox::placeholder{color:#8793a4}
+.clear-btn{
+  min-width:132px;border:0;border-radius:15px;background:#075ca8;color:white;
+  font-size:21px;font-weight:700;cursor:pointer;padding:0 28px;
+  box-shadow:0 3px 8px rgba(7,92,168,.14)
+}
+.clear-btn:hover{background:#064f91}
+.smart-card{
+  margin-top:22px;padding:27px 35px;border-radius:18px;
+  background:linear-gradient(100deg,#eaf5ff,#f4f8ff);
+  display:grid;grid-template-columns:95px 1fr 1.15fr;align-items:center;
+  box-shadow:inset 0 0 0 1px rgba(77,145,205,.06)
+}
+.bulb{font-size:50px;text-align:center}
+.tip-left{padding:0 34px 0 12px;border-right:1px solid #bfd9ed}
+.tip-title{font-size:21px;font-weight:750;color:#075a9e;margin-bottom:8px}
+.tip-text,.tip-right{font-size:18px;line-height:1.55;color:#344b64}
+.tip-right{padding-left:48px}
+.tip-text strong,.tip-right strong{color:#124f84}
+.department-grid{
+  margin-top:22px;display:grid;grid-template-columns:repeat(6,1fr);gap:14px;
+}
+.dept-btn{
+  border:1px solid rgba(70,110,150,.05);border-radius:16px;min-height:82px;
+  padding:13px 12px;cursor:pointer;font-size:17px;color:#17324d;
+  display:flex;align-items:center;justify-content:center;gap:11px;
+  transition:.15s ease;box-shadow:0 2px 6px rgba(30,70,110,.035)
+}
+.dept-btn:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(30,70,110,.10)}
+.dept-btn.active{outline:3px solid rgba(7,92,168,.18);font-weight:700}
+.dept-icon{font-size:27px}
+.lab{background:#e9f5ff} .xray{background:#fff3e8} .msw{background:#e9f8ef}
+.physio{background:#fff0f3} .pharmacy{background:#f1efff} .diagnostic{background:#eaf7f8}
+.nursing{background:#fff7e6} .operations{background:#f0f1fb} .housekeeping{background:#f7f0e8} .sos{background:#ffe8ef;color:#9b3151;font-weight:700}
+.cisco{background:#eaf8f8} .others{background:#f2f3f5}
+.results-header{margin:28px 2px 12px;color:#64768a;font-size:14px}
+.result{
+  background:white;border-radius:14px;padding:17px 20px;margin-bottom:11px;
+  box-shadow:0 2px 8px rgba(29,58,88,.07);border:1px solid #edf1f6;
+  display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+}
+.category{font-size:11px;color:#78889a;text-transform:uppercase;letter-spacing:.7px}
+.title{font-size:19px;font-weight:700;color:#173d66;margin-top:3px}
+.ext{font-size:29px;color:#d65020;font-weight:800;text-align:right}
+.desc{margin-top:6px;color:#66778a;font-size:14px}
+.noresult{text-align:center;color:#8793a4;padding:28px 10px}
+.footer{text-align:center;color:#758396;font-size:14px;margin-top:42px}
+@media(max-width:900px){
+  .department-grid{grid-template-columns:repeat(3,1fr)}
+  .smart-card{grid-template-columns:70px 1fr}
+  .tip-right{grid-column:1/-1;padding:18px 0 0 82px}
+  .tip-left{border-right:0}
+}
+@media(max-width:600px){
+  .container{padding:30px 16px}
+  h1{font-size:34px}
+  .notice{font-size:17px;margin-bottom:25px}
+  #searchBox{height:64px;font-size:18px;padding-left:58px}
+  .search-icon{left:19px}
+  .clear-btn{min-width:90px;font-size:17px;padding:0 15px}
+  .smart-card{display:block;padding:22px}
+  .bulb{text-align:left;font-size:38px;margin-bottom:8px}
+  .tip-left{padding:0}
+  .tip-right{padding:13px 0 0}
+  .department-grid{grid-template-columns:repeat(2,1fr)}
+  .dept-btn{min-height:68px}
+  .result{grid-template-columns:1fr}
+  .ext{text-align:left}
+}
+
+/* Department buttons — matched to reference design */
+.department-grid .dept-btn{
+  background:#dff3ea;
+  color:#064e63;
+  font-weight:700;
+  border:1px solid rgba(44,120,100,.04);
+}
+.department-grid .dept-btn:hover{
+  background:#d5eee3;
+}
+.department-grid .dept-btn.sos{
+  background:#f9dfe7;
+  color:#8f2948;
+}
+.department-grid .dept-btn.sos:hover{
+  background:#f5d3de;
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Khatib Polyclinic Phone Directory</h1>
+  <div class="notice">All extension numbers start with <strong>6216-</strong></div>
+
+  <div class="search-panel">
+    <div class="search-wrap">
+      <span class="search-icon" aria-hidden="true"></span>
+      <input id="searchBox" type="text" placeholder="Search room or service" autocomplete="off">
+    </div>
+    <button class="clear-btn" onclick="clearSearch()">Clear</button>
+  </div>
+
+  <div class="smart-card">
+    <div class="bulb">💡</div>
+    <div class="tip-left">
+      <div class="tip-title">Smart Search Tip</div>
+      <div class="tip-text">Room code = <strong>Level + Room Number.</strong><br>
+      Example: <strong>Level 1, Room 09 → 0109.</strong></div>
+    </div>
+    <div class="tip-right">Or search by department, e.g.<br>
+      <strong>Lab, X-ray, MSW, or Physio</strong>, etc.
+    </div>
+  </div>
+
+  <div class="department-grid">
+    <button class="dept-btn lab" data-search="lab">Lab</button>
+    <button class="dept-btn xray" data-search="x-ray">X-ray</button>
+    <button class="dept-btn msw" data-search="msw">MSW</button>
+    <button class="dept-btn physio" data-search="physio">Physio</button>
+    <button class="dept-btn pharmacy" data-search="pharmacy">Pharmacy</button>
+    <button class="dept-btn diagnostic" data-filter="diagnostic">Diagnostic</button>
+    <button class="dept-btn nursing" data-filter="nursing">Nursing</button>
+    <button class="dept-btn operations" data-search="operations">Operations</button>
+    <button class="dept-btn housekeeping" data-search="housekeeping">Housekeeping</button>
+    <button class="dept-btn cisco" data-search="cisco">Cisco</button>
+    <button class="dept-btn sos" data-search="2888">SOS</button>
+  </div>
+
+  <div id="results"></div>
+  <div class="footer">Last Updated: 24-Nov-2025</div>
+</div>
+
+<script>
+const rooms = [
+
+
+{code:"0101",name:"L1A Consult Room 1",ext:"2702"},
+{code:"0102",name:"L1A Consult Room 2",ext:"2703"},
+{code:"0103",name:"L1A Consult Room 3",ext:"2704"},
+{code:"0104",name:"L1A Consult Room 4",ext:"2705"},
+{code:"0108",name:"L1 FIN Counsellor Room 8",ext:"2707"},
+{code:"0109",name:"L1B Resuscitation Room 9",ext:"2708"},
+{code:"0110",name:"L1B Treatment Room 10 (Station)",ext:"2709"},
+{code:"0110",name:"L1B Treatment Room 10 (COW)",ext:"2710"},
+{code:"0111",name:"L1C Segregation Room 11",ext:"2711"},
+{code:"0112",name:"L1C Segregation Room 12",ext:"2712"},
+{code:"0113",name:"L1C DOTS Room 13",ext:"2713"},
+
+{code:"0201",name:"L2A Huddle Room 1",ext:"2718"},
+{code:"0203",name:"L2A Consult Room 3 (Team E)",ext:"2720"},
+{code:"0204",name:"L2A CM Room 4 (Team E)",ext:"2721"},
+{code:"0205",name:"L2A CC Room 5 (Team E)",ext:"2722"},
+{code:"0206",name:"L2A Consult Room 6 (Team E)",ext:"2723"},
+{code:"0207",name:"L2 Resus / APN Room 7",ext:"2724"},
+{code:"0208",name:"L2A Care Coach Room 8",ext:"2725"},
+{code:"0209",name:"L2A CM Room 9",ext:"2726"},
+{code:"0210",name:"L2A PHARM-MTM/SCC Room 10",ext:"2727"},
+{code:"0211",name:"L2A Consult Room 11 (Gen Pool)",ext:"2728"},
+{code:"0212",name:"L2A Consult Room 12 (Team B)",ext:"2729"},
+{code:"0213",name:"L2A CC Room 13 (Team B)",ext:"2730"},
+{code:"0214",name:"L2A CM Room 14 (Team B)",ext:"2731"},
+{code:"0215",name:"L2A Consult Room 15 (Team B)",ext:"2732"},
+{code:"0216",name:"L2A Huddle Room 16",ext:"2733"},
+{code:"0217",name:"L2B Huddle Room 17",ext:"2734"},
+{code:"0218",name:"L2B Consult Room 18 (Team A)",ext:"2735"},
+{code:"0219",name:"L2B CM Room 19 (Team A)",ext:"2736"},
+{code:"0220",name:"L2B CC Room 20 (Team A)",ext:"2737"},
+{code:"0221",name:"L2B Consult Room 21 (Team A)",ext:"2738"},
+{code:"0222",name:"L2B DFS Room 22",ext:"2739"},
+{code:"0223",name:"L2B DRP Room 23",ext:"2740"},
+{code:"0224",name:"L2B Vaccination Room 24",ext:"2741"},
+
+{code:"0300",name:"L3 Ops Counter A",ext:"2757"},
+{code:"0300",name:"L3A BP/BMI Station A",ext:"2758"},
+{code:"0302",name:"L3A DRP Room 2",ext:"2760"},
+{code:"0303",name:"L3A DFS Room 3",ext:"2761"},
+{code:"0304",name:"L3 Resus / Vaccination Room 4",ext:"2762"},
+{code:"0305",name:"L3A Consult Room 5",ext:"2763"},
+{code:"0306",name:"L3A Consult Room 6",ext:"2764"},
+{code:"0307",name:"L3A Consult Room 7",ext:"2765"},
+{code:"0308",name:"L3A Consult Room 8 (Team C)",ext:"2766"},
+{code:"0309",name:"L3A CC Room 9 (Team C)",ext:"2767"},
+{code:"0310",name:"L3A CM Room 10 (Team C)",ext:"2768"},
+{code:"0311",name:"L3A Consult Room 11 (Team C)",ext:"2769"},
+{code:"0312",name:"L3A Huddle Room 12",ext:"2770"},
+{code:"0313",name:"L3B Huddle Room 13",ext:"2771"},
+{code:"0314",name:"L3B Consult Room 14 (Team D)",ext:"2772"},
+{code:"0315",name:"L3B CM Room 15 (Team D)",ext:"2773"},
+{code:"0316",name:"L3B HALT CKD Room 16",ext:"2774"},
+{code:"0317",name:"L3B Consult Room 17 (Team D)",ext:"2775"},
+{code:"0319",name:"L3B Consult Room 19",ext:"2777"},
+{code:"0320",name:"L3B Consult Room 20",ext:"2778"},
+{code:"0321",name:"L3B Consult Room 21",ext:"2779"},
+
+{code:"0400",name:"L4 Ops Counter A",ext:"2796"},
+{code:"0400",name:"L4 Ops Counter B",ext:"2797"},
+{code:"0401",name:"L4A Immunization Screening Room 1",ext:"2798"},
+{code:"0402",name:"L4A Nursing DA Room 2",ext:"2799"},
+{code:"0403",name:"L4A Nursing DA Room 3",ext:"2800"},
+{code:"0404",name:"L4A Immunization Room 4",ext:"2801"},
+{code:"0405",name:"L4A Immunization Room 5",ext:"2802"},
+{code:"0406",name:"L4A Immunization Room 6",ext:"2803"},
+{code:"0407",name:"L4A Room 7",ext:"2804"},
+{code:"0408",name:"L4A Dietitics Room 8",ext:"2805"},
+{code:"0409",name:"L4A Women's Clinic Room 9",ext:"2806"},
+{code:"0410",name:"L4A Embrace Room 10",ext:"2807"},
+{code:"0411",name:"L4A CC Room 11",ext:"2808"},
+{code:"0412",name:"L4A Consult DA Room 12",ext:"2809"},
+{code:"0413",name:"L4A Consult DA Room 13",ext:"2810"},
+{code:"0414",name:"L4A Consult Room 14",ext:"2811"},
+{code:"0400",name:"L4B BP/BMI Station",ext:"2812"},
+{code:"0415",name:"L4B Consult Room 15",ext:"2813"},
+{code:"0416",name:"L4B Consult Room 16",ext:"2814"},
+{code:"0417",name:"L4B Consult Room 17",ext:"2815"},
+{code:"0418",name:"L4B Consult Room 18",ext:"2816"},
+{code:"0419",name:"L4 Resus / Consult Room 19",ext:"2817"},
+{code:"0420",name:"L4B Consult Room 20",ext:"2818"},
+
+{code:"0400",name:"L4C Dental Counter C - Not in use",ext:"2819"},
+{code:"0400",name:"L4C Dental Counter D - Not in use",ext:"2820"},
+{code:"0400",name:"L4C Dental Counter E - Not in use",ext:"2821"},
+{code:"0400",name:"L4C Dental Record Office",ext:"2822"},
+{code:"0400",name:"L4C Dental General Office",ext:"2823"},
+{code:"0421",name:"L4C Dental Treatment Room 21",ext:"2824"},
+{code:"0422",name:"L4C Dental Treatment Room 22",ext:"2825"},
+{code:"0423",name:"L4C Dental Treatment Room 23",ext:"2826"},
+{code:"0424",name:"L4C Dental Treatment Room 24",ext:"2827"},
+{code:"0425",name:"L4C Dental Treatment Room 25",ext:"2828"},
+{code:"0426",name:"L4C Dental Treatment Room 26",ext:"2829"},
+{code:"0427",name:"L4C Dental Treatment Room 27",ext:"2830"},
+{code:"0428",name:"L4C Dental Treatment Room 28",ext:"2831"},
+{code:"0429",name:"L4C Dental Treatment Room 29",ext:"2832"},
+{code:"0430",name:"L4C Dental Treatment Room 30",ext:"2833"},
+{code:"0431",name:"L4D Dressing Room 31 (MDRO)",ext:"2834"},
+{code:"0432",name:"L4D Dressing Room 32",ext:"2835"},
+{code:"0433",name:"L4D Dressing Room 33",ext:"2836"},
+{code:"0434",name:"L4D Dressing Room 34",ext:"2837"},
+{code:"0435",name:"L4D Dressing Room 35",ext:"2838"},
+{code:"0436",name:"L4D MSP Room 36 (Recovery Area)",ext:"2839"},
+{code:"0436",name:"L4D MSP Room 36 (Procedure Room)",ext:"2840"},
+
+
+{code:"0500",name:"L5 Ops Counter A",ext:"2841"},
+{code:"0500",name:"L5 FMA Office",ext:"2842",desc:"Additional DID: 2843"},
+{code:"0501",name:"L5A FMA Consult Room 1",ext:"2844"},
+{code:"0502",name:"L5A FMA Consult Room 2",ext:"2845"},
+{code:"0503",name:"L5A FMA Consult Room 3",ext:"2846"},
+{code:"0504",name:"L5A FMA Consult Room 4",ext:"2847"},
+{code:"0505",name:"L5A FMA Consult Room 5",ext:"2848"},
+{code:"0506",name:"L5A FMA Consult Room 6",ext:"2849"},
+{code:"0500",name:"L5 Monitoring Room",ext:"2850 / 2851 / 2852 / 2853"},
+{code:"0500",name:"L5 Data Hub",ext:"2854"},
+{code:"0500",name:"L5 Clinic Head (Dr Gabriel Ding Teck Yong)",ext:"2855"},
+{code:"0500",name:"L5 Dy Head (Dr Sze Kai Ping)",ext:"2856"},
+{code:"0500",name:"L5 Dy Head (Dr Goh Jun Heng)",ext:"2857"},
+{code:"0500",name:"L5 Nurse Manager (Sister Tan Pek Hoon)",ext:"2858"},
+{code:"0500",name:"L5 Nurse Manager (Sister Rasyidah Binti Gozali)",ext:"2859"},
+{code:"0500",name:"L5 Nurse Clinician (Sister Janelle Ng Sze Ern)",ext:"2860"},
+{code:"0500",name:"L5 Operations Manager (Nicholas)",ext:"2861"},
+{code:"0500",name:"L5 Operations Executive (Cermelia)",ext:"2862"},
+{code:"0500",name:"L5 Operations Executive (Nicole)",ext:"2863"},
+{code:"0500",name:"L5 Asst Operations Executive (Jing Ru)",ext:"2864"},
+{code:"0500",name:"L5 Digital Archival Assistant (Theresa)",ext:"2865"},
+{code:"0500",name:"L5 SPSA/TL Desk (Jasmine)",ext:"2866"},
+{code:"0500",name:"L5 SPSA/TL Desk (Mei Ling)",ext:"2867"},
+{code:"0500",name:"L5 SPSA",ext:"2868 / 2869"},
+{code:"0500",name:"L5 Referral Backend",ext:"2870 / 2871"},
+{code:"0500",name:"L5 Ops Admin Desk (Videoconsult)",ext:"2872"},
+{code:"0500",name:"L5 Ops Admin 2 Desk",ext:"2873"},
+{code:"0500",name:"L5 CCTV Area",ext:"2888"},
+{code:"0500",name:"L5 IT Deskside",ext:"2874"},
+{code:"0500",name:"L5 Hot Desk",ext:"2875 / 2876 / 2877 / 2878"},
+{code:"0500",name:"L5 Safe Room",ext:"2879"}
+
+
+];
+
+const services = [
+
+
+{name:"Operations",desc:"L1 Ops Counter A",ext:"2700",tags:"ops operation"},
+{name:"Operations",desc:"L1A Ops Counter B",ext:"2701",tags:"ops operation"},
+{name:"Health Studio",desc:"L1 Health Studio",ext:"2714",tags:"health studio"},
+
+{name:"Operations",desc:"L2 Ops Counter A",ext:"2715",tags:"ops operation"},
+{name:"Operations",desc:"L2 Ops Counter B",ext:"2716",tags:"ops operation"},
+{name:"BP/BMI",desc:"L2A BP/BMI Station A",ext:"2717",tags:"bp bmi"},
+{name:"Psychology",desc:"L2A Psychology Room 2",ext:"2719",tags:"psychology"},
+{name:"Pharmacy",desc:"L1A Satellite Pharmacy",ext:"2706",tags:"pharm pharmacy"},
+{name:"Laboratory",desc:"L2C Lab Counter D",ext:"2742",tags:"lab laboratory"},
+{name:"Laboratory",desc:"L2C Satellite Backend Lab",ext:"2743",tags:"lab laboratory"},
+{name:"Pharmacy",desc:"L2D Retail Pharmacy",ext:"2744",tags:"pharm pharmacy"},
+{name:"Pharmacy",desc:"L2D Main Pharmacy 1",ext:"2745",tags:"pharm pharmacy"},
+{name:"Pharmacy",desc:"L2D Main Pharmacy 2",ext:"2746",tags:"pharm pharmacy"},
+{name:"Pharmacy",desc:"L2D Main Pharmacy 3",ext:"2747",tags:"pharm pharmacy"},
+
+{name:"Research",desc:"L3A Research Interview Room 1",ext:"2759",tags:"research"},
+{name:"Laboratory",desc:"L3C Lab PSA Counter D",ext:"2780",tags:"lab laboratory"},
+{name:"X-Ray",desc:"L3C X-ray PSA Counter E",ext:"2781",tags:"xray x-ray x ray"},
+{name:"Laboratory",desc:"L3C Lab Admin (Sharine)",ext:"2782",tags:"lab laboratory"},
+{name:"Laboratory",desc:"L3C Backend Laboratory (Check results)",ext:"2783",tags:"lab laboratory"},
+{name:"Ultrasound",desc:"L3C Ultrasound Room 29",ext:"2784",tags:"ultrasound"},
+{name:"X-Ray",desc:"L3C X-ray Room 30",ext:"2785",tags:"xray x-ray x ray"},
+{name:"X-Ray",desc:"L3C Backend X-ray",ext:"2786",tags:"xray x-ray x ray"},
+
+{name:"Physiotherapy",desc:"L3B Physiotherapy Room 13/14",ext:"2771 / 2772",tags:"phys physio physiotherapy"},
+{name:"Medical Social Work",desc:"L3B Medical Social Worker Room 18",ext:"2776",tags:"msw social worker social medical social work"},
+{name:"HALT CKD",desc:"L3B HALT CKD Room 16",ext:"2774",tags:"halt ckd"},
+{name:"Dietetics",desc:"L4A Dietitics Room 8",ext:"2805",tags:"dietitian dietetics dietitics"},
+
+{name:"Pharmacy",desc:"L2D Backend Pharmacy (SK)",ext:"No extension",tags:"pharm pharmacy backend sk"},
+{name:"Pharmacy",desc:"L2D Backend Pharmacy (Supervisor)",ext:"No extension",tags:"pharm pharmacy backend supervisor"},
+{name:"Pharmacy",desc:"L2D Pharmacy Clinic 35",ext:"No extension",tags:"pharm pharmacy clinic 35"},
+{name:"Pharmacy",desc:"L2D Pharmacy Clinic 36",ext:"No extension",tags:"pharm pharmacy clinic 36"},
+{name:"Pharmacy",desc:"L2D Pharmacist Office 1",ext:"No extension",tags:"pharm pharmacy pharmacist office"},
+{name:"Pharmacy",desc:"L2D Pharmacist Office 2",ext:"No extension",tags:"pharm pharmacy pharmacist office"},
+
+{name:"Dental",desc:"L4C Dental Record Office",ext:"2822",tags:"dental"},
+{name:"Dental",desc:"L4C Dental General Office",ext:"2823",tags:"dental"},
+
+{name:"Code Blue / Red / Black",desc:"Emergency",ext:"2888",tags:"code blue red black emergency"},
+{name:"Certis Supervisor",desc:"Housekeeping / Certis",ext:"8826 0266",tags:"certis housekeeping house keeping cleaner cleaning supervisor"},
+{name:"Cisco",desc:"Cisco",ext:"9485 1045",tags:"cisco security"},
+
+{name:"IT Deskside",desc:"KHA IT Deskside",ext:"8389 1243",tags:"it helpdesk deskside"},
+{name:"IT Helpdesk",desc:"IT Helpdesk",ext:"1800 483 4357",tags:"it helpdesk"}
+
+];
+
+const resultsDiv = document.getElementById("results");
+const searchBox = document.getElementById("searchBox");
+const buttons = [...document.querySelectorAll(".dept-btn")];
+
+function roomObject(item){
+  return {
+    type:"Room", title:item.name, ext:item.ext,
+    info:"Room Search Code: " + item.code + (item.desc ? " · " + item.desc : ""),
+    raw:item
+  };
+}
+
+function serviceObject(item){
+  return {type:"Service",title:item.name,ext:item.ext,info:item.desc,raw:item};
+}
+
+function allItems(){
+  return [...rooms.map(roomObject), ...services.map(serviceObject)];
+}
+
+function matchesKeyword(r, keyword){
+  const raw = r.raw;
+  const haystack = [
+    r.title, r.ext, r.info,
+    raw.code || "", raw.name || "", raw.desc || "", raw.tags || ""
+  ].join(" ").toLowerCase();
+  return haystack.includes(keyword.toLowerCase());
+}
+
+function render(results, label=""){
+  if(!results.length){
+    resultsDiv.innerHTML='<div class="noresult">No matching records found.</div>';
+    return;
+  }
+  resultsDiv.innerHTML =
+    (label ? `<div class="results-header">${label} · ${results.length} result${results.length===1?"":"s"}</div>` : "") +
+    results.map(r=>`
+      <div class="result">
+        <div>
+          <div class="category">${r.type}</div>
+          <div class="title">${r.title}</div>
+          <div class="desc">${r.info}</div>
+        </div>
+        <div class="ext">${r.ext}</div>
+      </div>
+    `).join("");
+}
+
+function searchDirectory(){
+  buttons.forEach(b=>b.classList.remove("active"));
+  const keyword=searchBox.value.trim().toLowerCase();
+  if(!keyword){
+    resultsDiv.innerHTML='<div class="noresult">Start typing or choose a department.</div>';
+    return;
+  }
+  render(allItems().filter(r=>matchesKeyword(r,keyword)), `Search: ${searchBox.value.trim()}`);
+}
+
+function departmentResults(type){
+  const all=allItems();
+  if(type==="diagnostic"){
+    const words=["lab","laboratory","x-ray","xray","ultrasound","diagnostic"];
+    return all.filter(r=>words.some(w=>matchesKeyword(r,w)));
+  }
+  if(type==="nursing"){
+    const words=[
+      "nursing","nurse","treatment","resus","vaccination","immunization",
+      "dressing","dfs","drp","segregation","dots","care coach","cc room",
+      "care manager","cm room"
+    ];
+    return all.filter(r=>{
+      const isNursing = words.some(w=>matchesKeyword(r,w));
+      const isDental = matchesKeyword(r,"dental");
+      return isNursing && !isDental;
+    });
+  }
+  return [];
+}
+
+buttons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    buttons.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    const keyword=btn.dataset.search;
+    const filter=btn.dataset.filter;
+    if(keyword){
+      searchBox.value=keyword;
+      render(allItems().filter(r=>matchesKeyword(r,keyword)), btn.textContent.trim());
+    } else {
+      searchBox.value="";
+      render(departmentResults(filter), btn.textContent.trim());
+    }
+    resultsDiv.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+});
+
+function clearSearch(){
+  searchBox.value="";
+  buttons.forEach(b=>b.classList.remove("active"));
+  resultsDiv.innerHTML='<div class="noresult">Start typing or choose a department.</div>';
+  searchBox.focus();
+}
+
+searchBox.addEventListener("input",searchDirectory);
+clearSearch();
+</script>
+</body>
+</html>
